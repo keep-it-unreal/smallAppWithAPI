@@ -49,7 +49,6 @@ class Node{
     }
     public void addSumSize(int size){
         this.size += size;
-        System.out.println(this.size);
         if(parent != null){
             parent.addSumSize(this.size);
         }
