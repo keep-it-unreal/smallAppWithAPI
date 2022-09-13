@@ -16,7 +16,6 @@ public class TreeStr {
 class Node{
     String id, url, type;
     int size = 0;
-    int sumSize = 0;
     Node parent = null;
     ArrayList<Node> children;
     public Node(String id) {
@@ -30,25 +29,26 @@ class Node{
 
     public void addUrl(String url){
         if(url == "None")
-            url = null;
+            return;
         this.url = url;
     }
     public void addType(String type){
         if(type == "None")
-            type = null;
+            return;
         this.type = type;
     }
     public void addSize(String size){
         if (size == "None")
             return;
         else {
-            this.size = Integer.parseInt(size);
-            this.addSumSize(this.size);
+            int intSize = Integer.parseInt(size);
+            this.addSumSize(intSize - this.size);
         }
 
     }
     public void addSumSize(int size){
         this.size += size;
+        System.out.println(this.size);
         if(parent != null){
             parent.addSumSize(this.size);
         }
@@ -137,5 +137,8 @@ class Request{
         cur.delete();
         if (cur.parent != null)
             cur.parent.children.remove(cur);
+        if (cur.size != 0){
+            cur.addSumSize(-cur.size);
+        }
     }
 }
