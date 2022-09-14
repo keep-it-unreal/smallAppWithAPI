@@ -3,10 +3,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.util.*;
 import java.lang.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TreeStr {
     public static HashMap<String, Node> mainFolder = new HashMap<>();
@@ -18,6 +16,8 @@ class Node{
     int size = 0;
     Node parent = null;
     ArrayList<Node> children;
+
+    GregorianCalendar curDate;
     public Node(String id) {
         this.id = id;
         children = new ArrayList<>();
@@ -66,6 +66,12 @@ class Node{
             TreeStr.mainFolder.get(parentId).addChildren(this);
             parent = TreeStr.mainFolder.get(parentId);
         }
+    }
+    public void changeParent(String parentId) {
+        parent.addSumSize(-this.size);
+        this.parent.children.remove(this);
+        this.addParent(parentId);
+        this.addSumSize(this.size);
     }
     public Map getInfo() {
         Map result = new HashMap();
@@ -123,6 +129,7 @@ class Request{
             file.addType(item.getOrDefault("type", "None").toString());
             file.addParent(item.getOrDefault("parentId", "None").toString());
             file.addSize(item.getOrDefault("size", "None").toString());
+            file.curDate = new GregorianCalendar();
         }
 
     }
@@ -140,5 +147,6 @@ class Request{
         if (cur.size != 0){
             cur.addSumSize(-cur.size);
         }
+        cur.curDate = new GregorianCalendar();
     }
 }

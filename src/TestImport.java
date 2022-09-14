@@ -26,6 +26,6 @@ public class TestImport {
 
         Node parent_1 = TreeStr.mainFolder.get("b1d8fd7d-2ae3-47d5-b2f9-0f094af800d4").parent;
         System.out.println(parent_1==parent);
-        System.out.println(parent.sumSize);
+        System.out.println(parent.size);
     }
 }
