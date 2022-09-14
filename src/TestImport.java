@@ -9,7 +9,8 @@ import java.io.*;
 public class TestImport {
     public static void testImport() throws IOException {
         String s = File.separator;
-        String file = "C:" + s + "Users" + s + "User" + s + "Desktop" + s + "Java" + s + "smallApp" + s + "ForTest.txt";
+        String file = "C:" + s + "Users" + s + "79022" + s + "Desktop" + s + "Java" +
+                s + "smallApp"  + s + "Text" + s + "ForTest.txt";
         String x = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
         x = x.replaceAll(System.getProperty("line.separator"), "");
         x = x.replaceAll(" ", "");
@@ -26,6 +27,7 @@ public class TestImport {
 
         Node parent_1 = TreeStr.mainFolder.get("b1d8fd7d-2ae3-47d5-b2f9-0f094af800d4").parent;
         System.out.println(parent_1==parent);
-        System.out.println(parent.size);
+        System.out.println(parent.size==384);
+        System.out.println(parent.parent.size == 384);
     }
 }

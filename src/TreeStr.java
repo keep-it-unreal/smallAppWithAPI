@@ -47,10 +47,12 @@ class Node{
 
     }
     public void addSumSize(int size){
+        if (size == 0)
+            return;
+
         this.size += size;
-        System.out.println(this.size);
         if(parent != null){
-            parent.addSumSize(this.size);
+            parent.addSumSize(size);
         }
     }
 
@@ -62,16 +64,19 @@ class Node{
             Node parent = new Node(parentId);
             TreeStr.mainFolder.put(parentId, parent);
         }
+
+        if (this.parent != null && this.parent.id != parentId)
+            changeParent();
+
         if(!TreeStr.mainFolder.get(parentId).children.contains(this)) {
             TreeStr.mainFolder.get(parentId).addChildren(this);
             parent = TreeStr.mainFolder.get(parentId);
+            parent.addSumSize(this.size);
         }
     }
-    public void changeParent(String parentId) {
+    public void changeParent() {
         parent.addSumSize(-this.size);
         this.parent.children.remove(this);
-        this.addParent(parentId);
-        this.addSumSize(this.size);
     }
     public Map getInfo() {
         Map result = new HashMap();
@@ -127,8 +132,8 @@ class Request{
             file = TreeStr.mainFolder.get(id);
             file.addUrl(item.getOrDefault("url", "None").toString());
             file.addType(item.getOrDefault("type", "None").toString());
-            file.addParent(item.getOrDefault("parentId", "None").toString());
             file.addSize(item.getOrDefault("size", "None").toString());
+            file.addParent(item.getOrDefault("parentId", "None").toString());
             file.curDate = new GregorianCalendar();
         }
 
@@ -147,6 +152,5 @@ class Request{
         if (cur.size != 0){
             cur.addSumSize(-cur.size);
         }
-        cur.curDate = new GregorianCalendar();
     }
 }

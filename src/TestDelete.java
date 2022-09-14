@@ -4,7 +4,8 @@ import java.io.IOException;
 
 public class TestDelete {
     public static void main(String[] args) throws IOException {
-        TestImport.testImport();
+        //TestImport.testImport();
+        TestUpdates.testUpdates();
         /*TestNodes.testNodes();
         Request.deleteR("069cb8d7-bbdd-47d3-ad8f-82ef4c269df1");
         try{
