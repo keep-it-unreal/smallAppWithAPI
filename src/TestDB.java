@@ -25,13 +25,13 @@ public class TestDB {
                         """;
                 preparedStatement = connection.prepareStatement(sql);
                 id = newFolder.get("id").toString();
-                url = newFolder.get("url").toString();
+                url = newFolder.get("url") != null ? newFolder.get("url").toString() : "null";
                 size = newFolder.get("size").toString();
                 type = newFolder.get("type").toString();
-                parentID = newFolder.get("parentID").toString();
-                children = new StringBuilder();
+                parentID = newFolder.get("parentId") != null ? newFolder.get("parentId").toString() : "null";
+                children = new StringBuilder("");
                 for(Node child: TreeStr.mainFolder.get(id).children){
-                    children.append(", " + child.id);
+                    children.append(child.id + ", ");
                 }
                 preparedStatement.setString(1, id);
                 preparedStatement.setString(2, url);
@@ -47,12 +47,12 @@ public class TestDB {
                 sql = "UPDATE treeStr SET url = ?, size = ?, parent_id = ?, children_id = ? where id = ?;";
                 preparedStatement = connection.prepareStatement(sql);
                 id = newFolder.get("id").toString();
-                url = newFolder.get("url").toString();
+                url = newFolder.get("url") != null ? newFolder.get("url").toString() : "null";
                 size = newFolder.get("size").toString();
-                parentID = newFolder.get("parentID").toString();
-                children = new StringBuilder();
+                parentID = newFolder.get("parentId") != null ? newFolder.get("parentId").toString() : "null";
+                children = new StringBuilder("");
                 for(Node child: TreeStr.mainFolder.get(id).children){
-                    children.append(", " + child.id);
+                    children.append(child.id + ", ");
                 }
                 preparedStatement.setString(1, url);
                 preparedStatement.setString(2, size);

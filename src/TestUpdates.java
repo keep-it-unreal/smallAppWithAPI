@@ -7,9 +7,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 public class TestUpdates {
-    public static void testUpdates() throws Exception {
+    public static void testUpdates() throws IOException, SQLException {
         String s = File.separator;
         String file = "C:" + s + "Users" + s + "79022" + s + "Desktop" + s + "Java" +
                 s + "smallApp2" + s + "Text" + s + "ForTest_update.txt";

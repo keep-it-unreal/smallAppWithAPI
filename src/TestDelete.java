@@ -1,9 +1,11 @@
 import org.json.simple.JSONObject;
 
 import java.io.*;
+import java.sql.SQLException;
+
 
 public class TestDelete {
-    public static void delete() throws Exception {
+    public static void delete() throws IOException, SQLException {
         //TestImport.testImport();
         TestUpdates.testUpdates();
         /*TestNodes.testNodes();
