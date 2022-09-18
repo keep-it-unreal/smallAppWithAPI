@@ -5,12 +5,13 @@ import java.nio.file.Paths;
 import org.json.simple.JSONObject;
 
 import java.io.*;
+import java.sql.SQLException;
 
 public class TestImport {
-    public static void testImport() throws IOException {
+    public static void testImport() throws IOException, SQLException {
         String s = File.separator;
         String file = "C:" + s + "Users" + s + "79022" + s + "Desktop" + s + "Java" +
-                s + "smallApp"  + s + "Text" + s + "ForTest.txt";
+                s + "smallApp2"  + s + "Text" + s + "ForTest.txt";
         String x = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
         x = x.replaceAll(System.getProperty("line.separator"), "");
         x = x.replaceAll(" ", "");

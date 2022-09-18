@@ -3,6 +3,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.lang.reflect.Array;
+import java.sql.SQLException;
 import java.util.*;
 import java.lang.*;
 
@@ -107,15 +108,18 @@ class Node{
         }
         TreeStr.mainFolder.remove(id);
     }
+
 }
 
 class Request{
+    public static ArrayList<Node> importNewItems = new ArrayList<>();
+    public static ArrayList<Node> importUpdateItems = new ArrayList<>();
     public static JSONObject parse(String x){
         Object obj = JSONValue.parse(x);
         return (JSONObject) obj;
     }
 
-    public static void importR(JSONObject x){
+    public static void importR(JSONObject x) throws SQLException {
         String id;
         Map item;
         Node file;
@@ -128,15 +132,19 @@ class Request{
             if (!TreeStr.mainFolder.containsKey(id)) {
                 file = new Node(id);
                 TreeStr.mainFolder.put(id, file);
+                Request.importNewItems.add(file);
+            } else {
+                file = TreeStr.mainFolder.get(id);
+                Request.importUpdateItems.add(file);
             }
-            file = TreeStr.mainFolder.get(id);
+
             file.addUrl(item.getOrDefault("url", "None").toString());
             file.addType(item.getOrDefault("type", "None").toString());
             file.addSize(item.getOrDefault("size", "None").toString());
             file.addParent(item.getOrDefault("parentId", "None").toString());
             file.curDate = new GregorianCalendar();
         }
-
+        TestDB.exportInDB();
     }
 
     public static JSONObject nodesR(String id){

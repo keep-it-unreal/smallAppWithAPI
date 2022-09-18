@@ -3,16 +3,16 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class TestUpdates {
-    public static void testUpdates() throws IOException {
+    public static void testUpdates() throws Exception {
         String s = File.separator;
         String file = "C:" + s + "Users" + s + "79022" + s + "Desktop" + s + "Java" +
-                s + "smallApp" + s + "Text" + s + "ForTest_update.txt";
+                s + "smallApp2" + s + "Text" + s + "ForTest_update.txt";
         String x = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
         x = x.replaceAll(System.getProperty("line.separator"), "");
         x = x.replaceAll(" ", "");

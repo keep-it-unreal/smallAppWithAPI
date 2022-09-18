@@ -1,9 +1,9 @@
 import org.json.simple.JSONObject;
 
-import java.io.IOException;
+import java.io.*;
 
 public class TestDelete {
-    public static void main(String[] args) throws IOException {
+    public static void delete() throws Exception {
         //TestImport.testImport();
         TestUpdates.testUpdates();
         /*TestNodes.testNodes();
