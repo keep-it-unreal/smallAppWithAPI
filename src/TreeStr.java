@@ -39,31 +39,32 @@ class Node{
         this.type = type;
     }
     public void addSize(String size){
-        if (size == "None")
+        if (size == "None" || type.equals("FOLDER"))
             return;
-        else {
-            int intSize = Integer.parseInt(size);
-            this.addSumSize(intSize - this.size);
-        }
-
+        int intSize = Integer.parseInt(size);
+        this.addSumSize(intSize - this.size);
     }
+
     public void addSumSize(int size){
         if (size == 0)
             return;
 
         this.size += size;
+        Request.importUpdateItems.add(this);
         if(parent != null){
             parent.addSumSize(size);
         }
     }
 
-    public void addParent(String parentId){
+    public void addParent(String parentId) {
         if (parentId == "None")
             return;
 
         if(!TreeStr.mainFolder.containsKey(parentId)){
             Node parent = new Node(parentId);
+            parent.addType("FOLDER");
             TreeStr.mainFolder.put(parentId, parent);
+            Request.importNewItems.add(parent);
         }
 
         if (this.parent != null && this.parent.id != parentId)
@@ -112,8 +113,8 @@ class Node{
 }
 
 class Request{
-    public static ArrayList<Node> importNewItems = new ArrayList<>();
-    public static ArrayList<Node> importUpdateItems = new ArrayList<>();
+    public static HashSet<Node> importNewItems = new HashSet<>();
+    public static HashSet<Node> importUpdateItems = new HashSet<>();
     public static JSONObject parse(String x){
         Object obj = JSONValue.parse(x);
         return (JSONObject) obj;
@@ -144,7 +145,6 @@ class Request{
             file.addParent(item.getOrDefault("parentId", "None").toString());
             file.curDate = new GregorianCalendar();
         }
-        TestDB.exportInDB();
     }
 
     public static JSONObject nodesR(String id){

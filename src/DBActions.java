@@ -1,21 +1,18 @@
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.postgresql.Driver;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestDB {
+public class DBActions {
 
     public static void exportInDB() throws SQLException{
         Map newFolder;
         String sql, id, url, size, type, parentID, updateDate;
         StringBuilder children;
         PreparedStatement preparedStatement;
-        try (var connection = ConnectManager.get();
-             var statement = connection.createStatement()){
+        try (var connection = ConnectManager.get()){
 
             for(Node i: Request.importNewItems) {
                 newFolder = i.getInfo();
@@ -42,6 +39,7 @@ public class TestDB {
                 preparedStatement.execute();
 
             }
+            Request.importNewItems.clear();
             for(Node i: Request.importUpdateItems) {
                 newFolder = i.getInfo();
                 sql = "UPDATE treeStr SET url = ?, size = ?, parent_id = ?, children_id = ? where id = ?;";
@@ -60,18 +58,18 @@ public class TestDB {
                 preparedStatement.setString(4, children.toString());
                 preparedStatement.setString(5, id);
                 preparedStatement.execute();
-
             }
+            Request.importUpdateItems.clear();
         }
     }
 
     public static void importFromDB() throws SQLException {
-        String id, url, type, parentID,updateDate, size;
+        String id, url, type, parentId,updateDate, size;
         JSONArray itemsList = new JSONArray();
         Map item;
         String sql = """
         SELECT * FROM treeStr;
-""";
+        """;
 
         try (var connection = ConnectManager.get();
         var statement = connection.createStatement()){
@@ -81,14 +79,14 @@ public class TestDB {
                 url = executeResult.getString("url");
                 size = executeResult.getString("size");
                 type = executeResult.getString("type");
-                parentID = executeResult.getString("parent_id");
+                parentId = executeResult.getString("parent_id");
                 //updateDate = executeResult.getString("update_date"); - пока не используем
                 item = new HashMap();
                 item.put("id", id);
                 item.put("url", url);
                 item.put("size", size);
                 item.put("type", type);
-                item.put("parentID", parentID);
+                item.put("parentId", parentId);
                 itemsList.add(new JSONObject(item));
             }
         }
