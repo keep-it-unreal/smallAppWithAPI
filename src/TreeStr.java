@@ -103,6 +103,20 @@ class Node{
         return result;
     }
 
+    public HashMap<String, String> getAllAttributes(){
+        HashMap<String, String> result = new HashMap<>();
+        result.put("type", type);
+        result.put("id", id);
+        result.put("url", url != null ? url : "null");
+        result.put("size", size + "");
+        result.put("parentId", parent != null ? parent.id : "null");
+
+        StringBuilder children = new StringBuilder("");
+        for(Node child: this.children){
+            children.append(child.id + ", ");
+        }
+        return result;
+    }
     public void delete()  {
         for (Node child : children) {
             child.delete();

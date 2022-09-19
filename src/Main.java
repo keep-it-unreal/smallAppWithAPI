@@ -9,7 +9,7 @@ public class Main {
         //Test.testDelete();
         //DBActions.exportInDB();
         //DBActions.importFromDB();
-        //Test.testExportInDB();
-        Test.testImportFromDB();
+        Test.testExportInDB();
+        //Test.testImportFromDB();
     }
 }

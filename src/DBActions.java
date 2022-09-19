@@ -8,55 +8,39 @@ import java.util.Map;
 public class DBActions {
 
     public static void exportInDB() throws SQLException{
-        Map newFolder;
+        HashMap<String, String> newFolder;
         String sql, id, url, size, type, parentID, updateDate;
         StringBuilder children;
         PreparedStatement preparedStatement;
         try (var connection = ConnectManager.get()){
 
             for(Node i: Request.importNewItems) {
-                newFolder = i.getInfo();
+                newFolder = i.getAllAttributes();
                 sql = """
                         INSERT INTO treeStr (id, url, size, type, parent_id, children_id)
                         VALUES (?, ?, ?, ?, ?, ?);
                         """;
                 preparedStatement = connection.prepareStatement(sql);
-                id = newFolder.get("id").toString();
-                url = newFolder.get("url") != null ? newFolder.get("url").toString() : "null";
-                size = newFolder.get("size").toString();
-                type = newFolder.get("type").toString();
-                parentID = newFolder.get("parentId") != null ? newFolder.get("parentId").toString() : "null";
-                children = new StringBuilder("");
-                for(Node child: TreeStr.mainFolder.get(id).children){
-                    children.append(child.id + ", ");
-                }
-                preparedStatement.setString(1, id);
-                preparedStatement.setString(2, url);
-                preparedStatement.setString(3, size);
-                preparedStatement.setString(4, type);
-                preparedStatement.setString(5, parentID);
-                preparedStatement.setString(6, children.toString());
+
+                preparedStatement.setString(1, newFolder.get("id"));
+                preparedStatement.setString(2, newFolder.get("url"));
+                preparedStatement.setString(3, newFolder.get("size"));
+                preparedStatement.setString(4, newFolder.get("type"));
+                preparedStatement.setString(5, newFolder.get("parentId"));
+                preparedStatement.setString(6, newFolder.get("children"));
                 preparedStatement.execute();
 
             }
             Request.importNewItems.clear();
             for(Node i: Request.importUpdateItems) {
-                newFolder = i.getInfo();
+                newFolder = i.getAllAttributes();
                 sql = "UPDATE treeStr SET url = ?, size = ?, parent_id = ?, children_id = ? where id = ?;";
                 preparedStatement = connection.prepareStatement(sql);
-                id = newFolder.get("id").toString();
-                url = newFolder.get("url") != null ? newFolder.get("url").toString() : "null";
-                size = newFolder.get("size").toString();
-                parentID = newFolder.get("parentId") != null ? newFolder.get("parentId").toString() : "null";
-                children = new StringBuilder("");
-                for(Node child: TreeStr.mainFolder.get(id).children){
-                    children.append(child.id + ", ");
-                }
-                preparedStatement.setString(1, url);
-                preparedStatement.setString(2, size);
-                preparedStatement.setString(3, parentID);
-                preparedStatement.setString(4, children.toString());
-                preparedStatement.setString(5, id);
+                preparedStatement.setString(1, newFolder.get("url"));
+                preparedStatement.setString(2, newFolder.get("size"));
+                preparedStatement.setString(3, newFolder.get("parentId"));
+                preparedStatement.setString(4, newFolder.get("children"));
+                preparedStatement.setString(5, newFolder.get("id"));
                 preparedStatement.execute();
             }
             Request.importUpdateItems.clear();
