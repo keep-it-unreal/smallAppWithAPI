@@ -6,10 +6,6 @@ import java.sql.SQLException;
 
 @RestController
 class FileController {
-    // Aggregate root
-    // tag::get-aggregate-root[]
-    // end::get-aggregate-root[]
-
     @PostMapping("/imports")
     void importNewNodes(@RequestBody String nodes) throws SQLException {
         nodes = nodes.replaceAll(System.getProperty("line.separator"), "");
