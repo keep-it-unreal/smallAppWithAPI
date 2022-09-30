@@ -32,7 +32,7 @@ class FileManagerApplicationTests {
 	public void testImport() throws IOException, SQLException {
 		String s = File.separator;
 		String file = "C:" + s + "Users" + s + "79022" + s + "Desktop" + s + "Java" +
-				s + "smallApp2" + s + "Text" + s + "ForTest.txt";
+				s + "demo" + s + "ForTests" + s + "ForTest.txt";
 		String x = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
 		x = x.replaceAll(System.getProperty("line.separator"), "");
 		x = x.replaceAll(" ", "");
@@ -74,7 +74,7 @@ class FileManagerApplicationTests {
 		testImport();
 		String s = File.separator;
 		String file = "C:" + s + "Users" + s + "79022" + s + "Desktop" + s + "Java" +
-				s + "smallApp2" + s + "Text" + s + "ForTest_update.txt";
+				s + "demo" + s + "ForTests" + s + "ForTest_update.txt";
 		String x = new String(Files.readAllBytes(Paths.get(file)), StandardCharsets.UTF_8);
 		x = x.replaceAll(System.getProperty("line.separator"), "");
 		x = x.replaceAll(" ", "");
