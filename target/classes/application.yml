@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:postgresql://localhost:5432/TreeStr
+    username: postgres
+    password: Zil131
+    driverClassName: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
