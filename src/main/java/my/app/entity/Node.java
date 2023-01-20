@@ -20,10 +20,7 @@ public class Node {
     String type;
     String parentId;
     int size = 0;
-    @ManyToOne
-    Node parentEntity;
-    @OneToMany
-    List<Node> children = new ArrayList<>();
+    List<String> children = new ArrayList<>();
 
     public void addingSumSize(int size) {
         if (size == 0)
@@ -31,6 +28,8 @@ public class Node {
 
         this.size += size;
         Application.updatesItems.add(this);
+
+        Node parentEntity = Application.mainFolder.get(this.parentId);
         if (parentEntity != null) {
             parentEntity.addingSumSize(size);
         }
@@ -40,32 +39,35 @@ public class Node {
         if (parentId == null || parentId.equalsIgnoreCase("None"))
             return;
 
-//        if(!Application.mainFolder.containsKey(parentId)){
-//            Node parent = new Node();
-//            parent.setId(parentId);
-//            parent.setType("FOLDER");
-//            Application.mainFolder.put(parentId, parent);
-//        }
+        if(!Application.mainFolder.containsKey(parentId)){
+            Node parentEntity = new Node();
+            parentEntity.setId(parentId);
+            parentEntity.setType("FOLDER");
+            Application.mainFolder.put(parentId, parentEntity);
+        }
 
-        if (this.parentEntity != null && !this.parentEntity.getId().equalsIgnoreCase(parentId)) {
+        Node parentEntity = Application.mainFolder.get(parentId);
+        if (parentEntity != null && !this.parentId.equalsIgnoreCase(parentId)) {
             changingParent();
         }
 
-        if(!Application.mainFolder.get(parentId).children.contains(this)) {
-            Application.mainFolder.get(parentId).children.add(this);
-            parentEntity = Application.mainFolder.get(parentId);
+        if(!parentEntity.children.contains(this.Id)) {
+            parentEntity.children.add(this.Id);
             parentEntity.addingSumSize(this.size);
         }
+//        Application.updatesItems.add(parentEntity);
     }
     public void changingParent() {
+        Node parentEntity = Application.mainFolder.get(parentId);
         parentEntity.addingSumSize(-this.size);
-        this.parentEntity.children.remove(this);
+        parentEntity.children.remove(this.Id);
     }
 
     public void deleting()  {
-        for (Node child : children) {
-            child.deleting();
+        for (String childId : children) {
+            Application.mainFolder.get(childId).deleting();
         }
-        Application.mainFolder.remove(Id);
+        Application.mainFolder.remove(this.Id);
+        Application.updatesItems.add(this);
     }
 }

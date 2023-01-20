@@ -1,6 +1,7 @@
 package my.app.controller;
 
 import lombok.RequiredArgsConstructor;
+import my.app.Application;
 import my.app.entity.Node;
 import my.app.service.NodeService;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,9 @@ public class NodeController {
     @PostMapping(value = "/createSomeNodes", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Node> createSomeNode(@RequestBody List<Node> list){
         service.saveAll(list);
+        for(Node updatedNode: Application.updatesItems){
+            service.updateNode(updatedNode);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -49,6 +53,9 @@ public class NodeController {
     @DeleteMapping("/deleteNode/{id}")
     public ResponseEntity<Node> deleteNode(@PathVariable String id){
         service.deleteNode(id);
+        for (Node deletedNode:Application.updatesItems) {
+            deleteNode(deletedNode.getId());
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -49,7 +49,6 @@ public class NodeService {
 
     public Node updateNode(Node node){
         findById(node.getId());
-        node.changingParent();
         return save(node);
     }
 
@@ -57,13 +56,11 @@ public class NodeService {
         findById(id);
         Node node = Application.mainFolder.get(id);
         node.deleting();
-        if (node.getParentEntity() != null)
-            node.getParentEntity().getChildren().remove(node);
+        Node parentEntity = Application.mainFolder.get(node.getParentId());
+        if (parentEntity != null)
+            parentEntity.getChildren().remove(node);
         if (node.getSize() != 0){
             node.addingSumSize(-node.getSize());
-        }
-        for (Node n:Application.updatesItems) {
-            updateNode(n);
         }
         repository.deleteById(id);
     }
