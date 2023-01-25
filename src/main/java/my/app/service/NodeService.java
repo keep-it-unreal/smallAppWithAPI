@@ -34,34 +34,18 @@ public class NodeService {
         return repository.save(node);
     }
 
-    public void saveAll(List<Node> list) {
-        String id;
-        for (Node n : list) {
-            id = n.getId();
-            if (!Application.mainFolder.containsKey(id)) {
-                Application.mainFolder.put(id, n);
-                save(n);
-            } else {
-                updateNode(n);
-            }
-        }
-    }
-
     public Node updateNode(Node node){
         findById(node.getId());
+        Node nodeBeforeChange = Application.mainFolder.get(node.getId());
+        if(node.getSize() != nodeBeforeChange.getSize()){
+            int changingSize = node.getSize() - nodeBeforeChange.getSize();
+            Application.mainFolder.get(node.getParentId()).addingSumSize(changingSize);
+        }
         return save(node);
     }
 
     public void deleteNode(String id){
         findById(id);
-        Node node = Application.mainFolder.get(id);
-        node.deleting();
-        Node parentEntity = Application.mainFolder.get(node.getParentId());
-        if (parentEntity != null)
-            parentEntity.getChildren().remove(node);
-        if (node.getSize() != 0){
-            node.addingSumSize(-node.getSize());
-        }
         repository.deleteById(id);
     }
 }

@@ -37,25 +37,41 @@ public class NodeController {
 
     @PostMapping(value = "/createSomeNodes", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Node> createSomeNode(@RequestBody List<Node> list){
-        service.saveAll(list);
+        String id;
+        for (Node n : list) {
+            id = n.getId();
+            if (!Application.mainFolder.containsKey(id)) {
+                Application.mainFolder.put(id, n);
+                createNode(n);
+            } else {
+                updateNode(n);
+            }
+        }
         for(Node updatedNode: Application.updatesItems){
             service.updateNode(updatedNode);
         }
+        Application.updatesItems.clear();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping(value = "/updateNode", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Node> updateNode(@RequestBody Node node){
         service.updateNode(node);
+        for(Node updatedNode: Application.updatesItems){
+            service.updateNode(updatedNode);
+        }
+        Application.updatesItems.clear();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteNode/{id}")
     public ResponseEntity<Node> deleteNode(@PathVariable String id){
-        service.deleteNode(id);
+        Node node = Application.mainFolder.get(id);
+        node.deleting();
         for (Node deletedNode:Application.updatesItems) {
-            deleteNode(deletedNode.getId());
+            service.deleteNode(deletedNode.getId());
         }
+        Application.updatesItems.clear();
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

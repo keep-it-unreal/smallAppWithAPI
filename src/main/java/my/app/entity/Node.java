@@ -1,9 +1,7 @@
 package my.app.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import my.app.Application;
 
 import java.util.ArrayList;
@@ -11,8 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Nodes")
-@Getter @Setter
-@RequiredArgsConstructor
+@Data
 public class Node {
     @Id
     String Id;
@@ -36,18 +33,11 @@ public class Node {
     }
 
     public void addingParent(String parentId) {
-        if (parentId == null || parentId.equalsIgnoreCase("None"))
+        if (parentId == null)
             return;
 
-        if(!Application.mainFolder.containsKey(parentId)){
-            Node parentEntity = new Node();
-            parentEntity.setId(parentId);
-            parentEntity.setType("FOLDER");
-            Application.mainFolder.put(parentId, parentEntity);
-        }
-
         Node parentEntity = Application.mainFolder.get(parentId);
-        if (parentEntity != null && !this.parentId.equalsIgnoreCase(parentId)) {
+        if (parentEntity != null && !this.parentId.equalsIgnoreCase(Application.mainFolder.get(this.Id).parentId)) {
             changingParent();
         }
 
@@ -55,7 +45,6 @@ public class Node {
             parentEntity.children.add(this.Id);
             parentEntity.addingSumSize(this.size);
         }
-//        Application.updatesItems.add(parentEntity);
     }
     public void changingParent() {
         Node parentEntity = Application.mainFolder.get(parentId);
@@ -63,11 +52,20 @@ public class Node {
         parentEntity.children.remove(this.Id);
     }
 
-    public void deleting()  {
+    public void deleteChildren()  {
         for (String childId : children) {
-            Application.mainFolder.get(childId).deleting();
+            Application.mainFolder.get(childId).deleteChildren();
         }
         Application.mainFolder.remove(this.Id);
         Application.updatesItems.add(this);
+    }
+    public void deleting(){
+        this.deleteChildren();
+        Node parentEntity = Application.mainFolder.get(this.parentId);
+        if (parentEntity != null)
+            parentEntity.getChildren().remove(this);
+        if (this.size != 0){
+            addingSumSize(-this.size);
+        }
     }
 }
