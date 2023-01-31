@@ -18,7 +18,7 @@ class NodeControllerTest {
     ResponseEntity<?> response;
 
     /**
-     In this test we check method .createNode().
+     In this test we check method .createNode(Node node).
      **/
     @Test
     void createNode(){
@@ -32,7 +32,7 @@ class NodeControllerTest {
     }
 
     /**
-     In this test we check method .findById().
+     In this test we check method .findById(String id).
      **/
     @Test
     void findById() {
@@ -45,6 +45,9 @@ class NodeControllerTest {
         assertThat(((Node)response.getBody()).getParentId()).isEqualTo("069cb8d7-bbdd-47d3-ad8f-82ef4c269df1");
     }
 
+    /**
+     In this test we check method .getAllNodes().
+     **/
     @Test
     void getAllNodes() {
         Node node = new Node();
@@ -62,6 +65,9 @@ class NodeControllerTest {
         assertThat(((List<Node>)response.getBody()).size()).isEqualTo(3);
     }
 
+    /**
+     In this test we check method .createSomeNode(List<Node> list).
+     **/
     @Test
     void createSomeNode() {
         List<Node> list = new ArrayList<>();
@@ -79,6 +85,9 @@ class NodeControllerTest {
         assertThat(controller.createSomeNode(list).getStatusCode().value()).isEqualTo(201);
     }
 
+    /**
+     In this test we check method .updateNode(Node node).
+     **/
     @Test
     void updateNode() {
         Node node = new Node();
@@ -92,6 +101,9 @@ class NodeControllerTest {
         assertThat(node.getSize()).isEqualTo(257);
     }
 
+    /**
+     In this test we check method .deleteNode(String id).
+     **/
     @Test
     void deleteNode() {
         Node node = new Node();
